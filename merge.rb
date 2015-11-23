@@ -9,17 +9,13 @@ module Sort
 
       private
 
-      def merge(left_sorted, right_sorted)
-        Merger.new(left_sorted, right_sorted)
-      end
-
       def iterate(sliced_array)
         return sliced_array if sliced_array.length <= 1
 
         mid = sliced_array.length/2 - 1
         left_sorted  = iterate(sliced_array[0..mid])
         right_sorted = iterate(sliced_array[(mid + 1)..-1])
-        return merge(left_sorted, right_sorted)
+        return Merger.new(left_sorted, right_sorted)
       end
     end
   end
