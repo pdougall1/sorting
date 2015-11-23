@@ -1,3 +1,5 @@
+require 'delegate'
+
 module Sort
   class Merge
     class << self
@@ -8,26 +10,7 @@ module Sort
       private
 
       def merge(left_sorted, right_sorted)
-        res = []
-        right_index = 0
-        left_index  = 0
-
-        loop do
-          right_finished  = right_index >= right_sorted.length
-          left_unfinished = left_index < left_sorted.length
-          break if right_finished && left_index >= left_sorted.length
-
-          if right_finished ||
-            (left_unfinished && left_sorted[left_index] < right_sorted[right_index])
-            res << left_sorted[left_index]
-            left_index += 1
-          else
-            res << right_sorted[right_index]
-            right_index += 1
-          end
-        end
-
-        return res
+        Merger.new(left_sorted, right_sorted)
       end
 
       def iterate(sliced_array)
@@ -38,6 +21,36 @@ module Sort
         right_sorted = iterate(sliced_array[(mid + 1)..-1])
         return merge(left_sorted, right_sorted)
       end
+    end
+  end
+
+  class Merger < SimpleDelegator
+    def initialize(left_sorted, right_sorted)
+      @left_sorted  = left_sorted
+      @right_sorted = right_sorted
+      super(merged_collection)
+    end
+
+    def merged_collection
+      res = []
+      right_index = 0
+      left_index  = 0
+
+      loop do
+        right_finished  = right_index >= @right_sorted.length
+        left_finished   = left_index >= @left_sorted.length
+        break if right_finished && left_finished
+
+        if right_finished || (!left_finished && @left_sorted[left_index] < @right_sorted[right_index])
+          res << @left_sorted[left_index]
+          left_index += 1
+        else
+          res << @right_sorted[right_index]
+          right_index += 1
+        end
+      end
+
+      return res
     end
   end
 end
