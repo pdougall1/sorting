@@ -35,20 +35,38 @@ module Sort
       res = []
 
       loop do
-        right_finished  = @right_index >= @right_sorted.length
-        left_finished   = @left_index >= @left_sorted.length
         break if right_finished && left_finished
 
-        if right_finished || (!left_finished && @left_sorted[@left_index] < @right_sorted[@right_index])
-          res << @left_sorted[@left_index]
+        if should_add_left_next?
+          res << left_at_index
           @left_index += 1
         else
-          res << @right_sorted[@right_index]
+          res << right_at_index
           @right_index += 1
         end
       end
 
       return res
+    end
+
+    def left_at_index
+      @left_sorted[@left_index]
+    end
+
+    def right_at_index
+      @right_sorted[@right_index]
+    end
+
+    def right_finished
+      @right_index >= @right_sorted.length
+    end
+
+    def left_finished
+      @left_index >= @left_sorted.length
+    end
+
+    def should_add_left_next?
+      right_finished || (!left_finished && left_at_index < right_at_index)
     end
   end
 end
