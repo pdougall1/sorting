@@ -24,25 +24,27 @@ module Sort
     def initialize(left_sorted, right_sorted)
       @left_sorted  = left_sorted
       @right_sorted = right_sorted
+      @right_index = 0
+      @left_index  = 0
       super(merged_collection)
     end
 
+    private
+
     def merged_collection
       res = []
-      right_index = 0
-      left_index  = 0
 
       loop do
-        right_finished  = right_index >= @right_sorted.length
-        left_finished   = left_index >= @left_sorted.length
+        right_finished  = @right_index >= @right_sorted.length
+        left_finished   = @left_index >= @left_sorted.length
         break if right_finished && left_finished
 
-        if right_finished || (!left_finished && @left_sorted[left_index] < @right_sorted[right_index])
-          res << @left_sorted[left_index]
-          left_index += 1
+        if right_finished || (!left_finished && @left_sorted[@left_index] < @right_sorted[@right_index])
+          res << @left_sorted[@left_index]
+          @left_index += 1
         else
-          res << @right_sorted[right_index]
-          right_index += 1
+          res << @right_sorted[@right_index]
+          @right_index += 1
         end
       end
 
