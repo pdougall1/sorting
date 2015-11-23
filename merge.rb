@@ -10,13 +10,23 @@ module Sort
       private
 
       def iterate(sliced_array)
-        return sliced_array if sliced_array.length <= 1
-
-        mid = sliced_array.length/2 - 1
-        left_sorted  = iterate(sliced_array[0..mid])
-        right_sorted = iterate(sliced_array[(mid + 1)..-1])
-        return Merger.new(left_sorted, right_sorted)
+        Iterator.new(sliced_array)
       end
+    end
+  end
+
+  class Iterator < SimpleDelegator
+    def initialize(sliced_array)
+      super(iterate(sliced_array))
+    end
+
+    def iterate(sliced_array)
+      return sliced_array if sliced_array.length <= 1
+
+      mid = sliced_array.length/2 - 1
+      left_sorted  = iterate(sliced_array[0..mid])
+      right_sorted = iterate(sliced_array[(mid + 1)..-1])
+      return Merger.new(left_sorted, right_sorted)
     end
   end
 
