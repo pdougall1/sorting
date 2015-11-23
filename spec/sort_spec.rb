@@ -1,5 +1,6 @@
 require 'rspec'
 require_relative '../bubble'
+require_relative '../merge'
 
 describe Sort::Bubble do
   subject { Sort::Bubble.sort(arr) }
@@ -19,8 +20,8 @@ describe Sort::Bubble do
   end
 end
 
-describe Sort::Bubble do
-  subject { Sort::Bubble.sort(arr) }
+describe Sort::Merge do
+  subject { Sort::Merge.sort(arr) }
   context "with an empty array" do
     let(:arr) { [] }
     it { is_expected.to eq [] }
